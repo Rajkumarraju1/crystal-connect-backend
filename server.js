@@ -1,4 +1,4 @@
-const express = require('express');
+ const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const cors = require('cors');
@@ -34,7 +34,6 @@ io.on("connection", (socket) => {
     console.log("Join request:", socket.id);
 
     if (waiting && waiting !== socket.id) {
-      // Match users
       const roomId = makeRoomId(waiting, socket.id);
       rooms[roomId] = { a: waiting, b: socket.id };
 
@@ -65,11 +64,9 @@ io.on("connection", (socket) => {
     if (!room) return;
 
     const other = room.a === socket.id ? room.b : room.a;
-
     io.to(other).emit("partner-skipped");
 
     delete rooms[roomId];
-
     waiting = socket.id;
     socket.emit("waiting");
   });
@@ -94,6 +91,7 @@ app.get("/", (req, res) => {
   res.send("Omegle backend server running!");
 });
 
-server.listen(PORT, () => {
+// IMPORTANT: Railway requires 0.0.0.0
+server.listen(PORT, "0.0.0.0", () => {
   console.log("Server running on port", PORT);
 });
