@@ -1,4 +1,4 @@
- const express = require('express');
+const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const cors = require('cors');
@@ -17,6 +17,7 @@ const io = new Server(server, {
   }
 });
 
+// Use Render-assigned port OR fallback
 const PORT = process.env.PORT || 3000;
 
 // Matchmaking queue
@@ -91,7 +92,7 @@ app.get("/", (req, res) => {
   res.send("Omegle backend server running!");
 });
 
-// IMPORTANT: Railway requires 0.0.0.0
-server.listen(PORT, "0.0.0.0", () => {
+// REQUIRED for Render
+server.listen(PORT, () => {
   console.log("Server running on port", PORT);
 });
